@@ -389,7 +389,7 @@ class TestAlphaServerMethods(unittest.TestCase):
                                                   mock_get_config):
         """Test position age uses cached values from BinancePnl calculation.
 
-        This tests Sean's requirement: position_age should be calculated once at
+        This tests the requirement: position_age should be calculated once at
         server startup using BinancePnl and cached in self.position_age_df.
         The get_position_age() method should join this cached data with incoming
         dataframes to apply the OLD_POSITION_RISK_MULT (3.5x) for positions > 30 days.
