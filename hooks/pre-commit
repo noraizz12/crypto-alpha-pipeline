@@ -1,0 +1,100 @@
+#!/bin/bash
+
+# Log file for debugging
+LOG_FILE="/tmp/pre-commit-hook.$USER.log"
+
+# Start logging
+echo "Pre-commit hook started at $(date)" > "$LOG_FILE"
+
+# These values will be replaced by install_git_hooks.sh
+ROOT_DIR="/path/to/root"
+SRC_DIR="/path/to/src"
+
+# Validate directories exist
+if [ ! -d "$ROOT_DIR" ] || [ ! -d "$SRC_DIR" ]; then
+    echo "Error: ROOT_DIR or SRC_DIR not properly set by install_git_hooks.sh" >> "$LOG_FILE"
+    echo "ROOT_DIR=$ROOT_DIR" >> "$LOG_FILE"
+    echo "SRC_DIR=$SRC_DIR" >> "$LOG_FILE"
+    exit 1
+fi
+
+# Change to the src directory
+cd "$SRC_DIR" || exit 1
+echo "Changed to directory: $(pwd)" >> "$LOG_FILE"
+
+# Activate virtual environment
+VENV_PATH="$SRC_DIR/venv"
+if [ -f "$VENV_PATH/bin/activate" ]; then
+    echo "Activating virtual environment" >> "$LOG_FILE"
+    source "$VENV_PATH/bin/activate"
+else
+    echo "Virtual environment not found at $VENV_PATH" >> "$LOG_FILE"
+    exit 1
+fi
+
+# Verify pylint is available
+if ! command -v pylint &> /dev/null; then
+    echo "pylint not found in the activated environment" >> "$LOG_FILE"
+    exit 1
+fi
+
+# Get all staged Python files
+STAGED_PY_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$')
+
+echo "Staged Python files:" >> "$LOG_FILE"
+echo "$STAGED_PY_FILES" >> "$LOG_FILE"
+
+if [[ "$STAGED_PY_FILES" = "" ]]; then
+    echo "No Python files staged for commit. Skipping checks." | tee -a "$LOG_FILE"
+    exit 0
+fi
+
+# First, check if all Python files compile
+echo "Checking Python syntax compilation..." | tee -a "$LOG_FILE"
+COMPILATION_FAILED=0
+for file in $STAGED_PY_FILES; do
+    echo "Compiling: $file" >> "$LOG_FILE"
+    # Capture both stdout and stderr, and check exit code properly
+    COMPILE_OUTPUT=$(python -m py_compile "$file" 2>&1)
+    COMPILE_EXIT_CODE=$?
+    
+    if [[ $COMPILE_EXIT_CODE -ne 0 ]]; then
+        echo "$COMPILE_OUTPUT" | tee -a "$LOG_FILE"
+        echo -e "\033[31mERROR: Python compilation failed for $file\033[0m" | tee -a "$LOG_FILE"
+        echo "Please fix syntax errors before committing." | tee -a "$LOG_FILE"
+        COMPILATION_FAILED=1
+    fi
+done
+
+if [[ $COMPILATION_FAILED -ne 0 ]]; then
+    echo -e "\033[31mPython compilation check failed. Fix syntax errors before committing.\033[0m" | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+echo -e "\033[32m✓ Python compilation check passed.\033[0m" | tee -a "$LOG_FILE"
+
+RC_FILE="$SRC_DIR/.pylintrc"
+
+# Run Pylint on each staged Python file
+echo "Running Pylint on staged Python files..." | tee -a "$LOG_FILE"
+for file in $STAGED_PY_FILES; do
+    echo "Running Pylint on: $file" >> "$LOG_FILE"
+    pylint --rcfile="$RC_FILE" --fail-under=9 "$file" | tee -a "$LOG_FILE"
+    PYLINT_EXIT_CODE=${PIPESTATUS[0]}
+    echo "Pylint exit code for $file: $PYLINT_EXIT_CODE" >> "$LOG_FILE"
+
+    if [[ $PYLINT_EXIT_CODE != 0 ]]; then
+        echo "Pylint failed for file: $file. Please fix the issues before committing." | tee -a "$LOG_FILE"
+        cat "$LOG_FILE"
+        exit 1
+    fi
+done
+
+echo "Pylint passed. Proceeding with the commit." | tee -a "$LOG_FILE"
+
+# Note: Unit tests have been moved to the pre-push hook
+# The pre-commit hook now only performs syntax and style checks
+
+echo -e "\033[32m✓ All pre-commit checks passed.\033[0m" | tee -a "$LOG_FILE"
+cat "$LOG_FILE"
+exit 0

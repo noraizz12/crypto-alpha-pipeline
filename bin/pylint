@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Wrapper script to run pylint with project configuration
+# This allows running pylint from anywhere in the project
+# Usage: ./bin/pylint [pylint options] <file(s)>
+
+# Get the directory where this script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
+# Change to project root directory
+cd "$PROJECT_ROOT"
+
+# Determine virtual environment directory (.venv for uv, venv for pip)
+if [ -d ".venv" ]; then
+    VIRTUALENV_DIR=".venv"
+elif [ -d "venv" ]; then
+    VIRTUALENV_DIR="venv"
+else
+    VIRTUALENV_DIR=""
+fi
+
+# Activate virtual environment if it exists and not already activated
+if [ -n "$VIRTUALENV_DIR" ] && [ -z "$VIRTUAL_ENV" ]; then
+    source "$VIRTUALENV_DIR/bin/activate"
+fi
+
+# Check if pylint is installed
+if ! command -v pylint &> /dev/null; then
+    echo "Error: pylint is not installed"
+    echo "Please install pylint: pip install pylint"
+    exit 1
+fi
+
+# Run pylint with project configuration
+if [ -f ".pylintrc" ]; then
+    exec pylint --rcfile=.pylintrc "$@"
+else
+    exec pylint "$@"
+fi

@@ -1,0 +1,185 @@
+{
+  "EXCHANGE_FEES": 5e-05,
+  "MAX_PORTFOLIO_NOTIONAL": 1700000,
+  "MAX_PORTFOLIO_NOTIONAL_SLACK": 0.1,
+  "MAX_TRADING_BIAS": 0.1,
+  "MAX_POSITION_PCT": 0.03,
+  "MAX_POSITION_BOUNDS": [[1.0, 0.06]],
+  "MAX_TRADE_DOLLARS": 50000,
+  "MIN_TRADE_DOLLARS": 100.0,
+  "MAX_ORDER_DOLLARS": 60000,
+  "MAX_TOTAL_ORDER_DOLLARS": 1000000,
+  "DEFAULT_SLIPPAGE": 0.0001,
+  "VOLUME_BUCKET_MINS": 60,
+  "MAX_POSITION_VOLUME_FRACTION": 0.05,
+  "ORDER_ACCELERATION": 1.5,
+  "MAX_VOLUME_FRACTION_PARTICIPATION": 0.01,
+  "HORIZON_MODEL_FACTOR": 0.0008,
+  "MIN_POSITION": 500.0,
+  "MAX_MOVE_FILTER": 2.5,
+  "MAX_DVOL_SIGMA": 2.0,
+  "MIN_FUNDING_RATE": -0.005,
+  "MIN_ADVP_FITTABLE": 10000000.0,
+  "MIN_ADVP_TRADEABLE": 1000000.0,
+  "MIN_ADVP_EXPANDABLE": 40000000.0,
+  "MIN_ADVP_FEATUREABLE": 25000000.0,
+  "OLD_POSITION_DAYS": 21,
+  "OLD_POSITION_RISK_MULT": 1.1,
+  "KAPPA": 6e-07,
+  "GAMMA": 5e-11,
+  "CONST_NOTIONAL": false,
+  "CORRECT_TARGET_IMBALANCE": false,
+  "OPT_RHO": 0.3,
+  "OPT_RHO_INTERVAL": 10,
+  "OPT_ALPHA": 1.6,
+  "MAX_ALPHA": 0.5,
+  "ALPHA_MULT": 1.0,
+  "ALPHA_TILT": 0.0002,
+  "SCALE_ALPHA_OPT": false,
+  "NEW_SCALE_ALPHA": false,
+  "CENTER_ALPHA_OPT": false,
+  "EXCLUDE_NON_ALPHA_TRADES": false,
+  "MIN_TSTAT": 1.5,
+  "FEATURE_SIGMA_BOUND": 5,
+  "BETA_LOOKBACK_PERIODS": 10,
+  "DEFAULT_FEATURE_LOOKBACK_PERIODS": 10,
+  "ADV_LOOKBACK_DAYS": 10,
+  "MA_LOOKBACK_DAYS": 10,
+  "MAX_FEATURE_SPLIT_DEPTH": 3,
+  "MIN_TREE_THRESHOLD": 0.0005,
+  "CLASSIFICATION_HISTORY_DAYS": 2,
+  "SVM_REGULARIZATION": 0.0005,
+  "TREE_SAMPLE_FRACTION": 0.1,
+  "MIN_SAMPLE_LEAF_PCT": 0.0001,
+  "MAX_LEAF_NODES": 16,
+  "MIN_CLASSIFICATION_QUANTILE": 0.1,
+  "CCP_ALPHA": 0.0001,
+  "FITTING_RESAMPLE_HORIZON_THRESHOLD": 1440,
+  "FITTING_RESAMPLE_FREQUENCY": "60min",
+  "SIGMA_BOUND_DEP": 5,
+  "SIGMA_BOUND_INDEP": 5,
+  "ENFORCE_REV_MOM": true,
+  "FILTER_DELISTING": true,
+  "DELISTING_BUFFER_DAYS": 6,
+  "NEWS_SIMILARITY_THRESHOLD": 0.9,
+  "RISK_FLD": "logret_HORIZON_trstd",
+  "RISK_HORIZON": 360,
+  "ST_RISK_HORIZON": 15,
+  "OPT_HORIZON": 360,
+  "MAX_TURNOVER": 1.0,
+  "OPT_OFFSET_MINS": 2,
+  "SKYROCKETING_SIGMA_LEVEL": 3,
+  "SKYROCKETING_SLIPPAGE": 0.0001,
+  "REOPTIMIZE_INTERVAL_MINS": 360,
+  "REOPT_TIMES": [
+    "00:00",
+    "06:00",
+    "12:00",
+    "18:00"
+  ],
+  "WAVE_INTERVAL_MINS": 5,
+  "TRADE_INTERVAL_MINS": 120,
+  "SHORT_TERM_MODEL_HORIZONS": [
+    15,
+    60,
+    120
+  ],
+  "SIM_EXECUTION_PRICE": "vwap",
+  "VWAP_HORIZON": 360,
+  "BASE_AGGRESSION": 0.0009,
+  "EXOG_TICKERS": [
+    "SPY",
+    "GLD",
+    "IYW"
+  ],
+  "DYNAMIC_UNIVERSE": false,
+  "SYMBOL_UNIVERSE": [
+    "BTC",
+    "ETH",
+    "BNB",
+    "ADA",
+    "ETC"
+  ],
+  "EXPOSURE_LIMITS": {
+    "dollar_exposure": 0.1
+  },
+  "FACTOR_SIGMAS": {
+    "dollar_exposure": 0.0016,
+    "dvolume_1440_trmean_cz": 0.001
+  },
+  "FEATURES": {
+    "15": {
+      "prod": [
+        "logret_15_trstd",
+        "volume_15"
+      ]
+    },
+    "360": {
+      "prod": [
+        "logret_360_trstd",
+        "volume_360"
+      ]
+    },
+    "720": {
+      "prod": [
+        "logret_720_trstd",
+        "volume_720"
+      ]
+    },
+    "1440": {
+      "prod": [
+        "logret_1440_trstd",
+        "volume_1440"
+      ]
+    }
+  },
+  "FCASTS": {
+    "1440": {
+      "return_type": "raw",
+      "refitting_days": 7,
+      "fitting_lookback_days": 2,
+      "features": [
+        "logret_1440_trstd",
+        "volume_1440"
+      ],
+      "models": []
+    },
+    "720": {
+      "return_type": "raw",
+      "refitting_days": 7,
+      "fitting_lookback_days": 2,
+      "features": [
+        "logret_720_trstd",
+        "volume_720"
+      ],
+      "models": [
+        {
+          "name": "c2vwap",
+          "indep": "c2vwap_ma",
+          "lags": 1,
+          "weight": 0.3
+        }
+      ]
+    },
+    "15": {
+      "return_type": "raw",
+      "refitting_days": 1,
+      "fitting_lookback_days": 2,
+      "features": [
+        "logret_15_trstd",
+        "volume_15"
+      ],
+      "models": [
+        {
+          "name": "hl",
+          "indep": "hl_ma",
+          "lags": 1,
+          "weight": 0.3
+        }
+      ]
+    }
+  },
+  "MIN_ADVP_PRICEABLE": 25000000.0,
+  "FEATUREABLE_HIST_PERIODS": 30,
+  "MAX_MARKET_CAP_EXPANDABLE_FRAC": 1.0
+}

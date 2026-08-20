@@ -1,0 +1,393 @@
+{
+  "EXCHANGE_FEES": 5e-05,
+  "MAX_PORTFOLIO_NOTIONAL": 10000000.0,
+  "MAX_PORTFOLIO_NOTIONAL_SLACK": 0.1,
+  "MAX_TRADING_BIAS": 0.1,
+  "MAX_POSITION_PCT": 0.04,
+  "MAX_POSITION_BOUNDS": [[1.0, 0.06]],
+  "MAX_TRADE_DOLLARS": 800000,
+  "MIN_TRADE_DOLLARS": 100.0,
+  "MAX_ORDER_DOLLARS": 200000,
+  "MAX_DOLLARS_PER_OPT_TO_TRADE_MULT": 1.3,
+  "MAX_TOTAL_ORDER_DOLLARS": 2000000.0,
+  "DEFAULT_SLIPPAGE": 0.0001,
+  "VOLUME_BUCKET_MINS": 60,
+  "MAX_POSITION_VOLUME_FRACTION": 0.05,
+  "ORDER_ACCELERATION": 1.15,
+  "MAX_VOLUME_FRACTION_PARTICIPATION": 0.02,
+  "MIN_POSITION": 1000.0,
+  "MAX_MOVE_FILTER": 2.5,
+  "MAX_DVOL_SIGMA": 2.0,
+  "MIN_FUNDING_RATE": -0.005,
+  "MIN_ADVP_FITTABLE": 10000.0,
+  "MIN_ADVP_TRADEABLE": 10000.0,
+  "MIN_ADVP_EXPANDABLE": 100000.0,
+  "MAX_MARKET_CAP_EXPANDABLE_FRAC": 1.0,
+  "MIN_ADVP_FEATUREABLE": 25000000.0,
+  "OLD_POSITION_DAYS": 30,
+  "OLD_POSITION_RISK_MULT": 3.5,
+  "KAPPA": 1e-07,
+  "GAMMA": 0.00025,
+  "CONST_NOTIONAL": false,
+  "CORRECT_TARGET_IMBALANCE": false,
+  "OPT_RHO": 0.3,
+  "OPT_RHO_INTERVAL": 10,
+  "OPT_ALPHA": 1.6,
+  "MAX_ALPHA": 0.05,
+  "ALPHA_MULT": 1.0,
+  "ALPHA_TILT": 0.0,
+  "SCALE_ALPHA_OPT": false,
+  "NEW_SCALE_ALPHA": false,
+  "EXCLUDE_NON_ALPHA_TRADES": false,
+  "MIN_TSTAT": 1.5,
+  "FEATURE_SIGMA_BOUND": 5,
+  "BETA_LOOKBACK_PERIODS": 10,
+  "DEFAULT_FEATURE_LOOKBACK_PERIODS": 10,
+  "ADV_LOOKBACK_DAYS": 10,
+  "MA_LOOKBACK_DAYS": 10,
+  "CLASSIFICATION_HISTORY_DAYS": 2,
+  "SVM_REGULARIZATION": 0.0005,
+  "MIN_CLASSIFICATION_QUANTILE": 0.1,
+  "USE_CLUSTER_REGRESSION": false,
+  "USE_CV_REGULARIZATION": false,
+  "WEIGHTED_REGRESSION": false,
+  "CLASSIFIER_TYPE": "rf",
+  "RF_N_ESTIMATORS": 100,
+  "RF_MAX_DEPTH": 10,
+  "RF_MIN_SAMPLES_SPLIT": 500,
+  "RF_MIN_SAMPLES_LEAF": 100,
+  "RF_MAX_SAMPLES": 0.35,
+  "RF_MAX_FEATURES": "sqrt",
+  "RF_BOOTSTRAP": true,
+  "RF_OOB_SCORE": true,
+  "RF_CCP_ALPHA": 0.001,
+  "RF_RANDOM_STATE": 42,
+  "RF_N_JOBS": -1,
+  "RF_CLASS_WEIGHT": "balanced",
+  "RF_VERBOSE": 1,
+  "FITTING_RESAMPLE_HORIZON_THRESHOLD": 1440,
+  "FITTING_RESAMPLE_FREQUENCY": "60min",
+  "SIGMA_BOUND_DEP": 5,
+  "SIGMA_BOUND_INDEP": 5,
+  "ENFORCE_REV_MOM": true,
+  "FILTER_DELISTING": true,
+  "DELISTING_BUFFER_DAYS": 6,
+  "NEWS_SIMILARITY_THRESHOLD": 0.9,
+  "RISK_FLD": "logret_HORIZON_trstd",
+  "RISK_HORIZON": 120,
+  "ST_RISK_HORIZON": 15,
+  "OPT_HORIZON": 1440,
+  "MAX_TURNOVER": 0.8,
+  "OPT_OFFSET_MINS": 2,
+  "SKYROCKETING_SIGMA_LEVEL": null,
+  "SKYROCKETING_SLIPPAGE": 0.001,
+  "REOPTIMIZE_INTERVAL_MINS": 120,
+  "REOPT_TIMES": [
+    "00:00",
+    "02:00",
+    "04:00",
+    "06:00",
+    "08:00",
+    "10:00",
+    "12:00",
+    "14:00",
+    "16:00",
+    "18:00",
+    "20:00",
+    "22:00"
+  ],
+  "WAVE_INTERVAL_MINS": 1,
+  "SHORT_TERM_MODEL_HORIZONS": [
+    15,
+    60
+  ],
+  "SIM_EXECUTION_PRICE": "vwap",
+  "VWAP_HORIZON": 120,
+  "BASE_AGGRESSION": 0.0009,
+  "EXOG_TICKERS": [
+    "SPY",
+    "GLD",
+    "IYW"
+  ],
+  "DYNAMIC_UNIVERSE": false,
+  "SYMBOL_UNIVERSE": [
+    "ETH",
+    "BNB",
+    "BTC"
+  ],
+  "FIT_TEST_DATE": "20250107",
+  "FEATURES": {
+    "43200": {
+      "non_prod": [
+        "open_interest_HORIZON_d",
+        "open_interest_HORIZON_dp",
+        "rsi_HORIZON"
+      ]
+    },
+    "10080": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "logret_HORIZON_lz_cz",
+        "logret_HORIZON_abs",
+        "logret_HORIZON_lz_abs",
+        "logret_resid_eqmkt_HORIZON_trmean",
+        "logret_resid_eqmkt_HORIZON_trstd",
+        "logret_resid_eqmkt_HORIZON_lz",
+        "logret_resid_wgtmkt_HORIZON_trmean",
+        "logret_resid_wgtmkt_HORIZON_trstd",
+        "logret_resid_wgtmkt_HORIZON_lz",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "dvolume_HORIZON_trmean_cz",
+        "relative_spread_HORIZON",
+        "ba_imbal_HORIZON",
+        "news_event",
+        "news_event_decayed_HORIZON",
+        "open_interest_HORIZON_d",
+        "open_interest_HORIZON_dp",
+        "rsi_HORIZON"
+      ]
+    },
+    "4320": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "logret_HORIZON_lz_cz",
+        "logret_HORIZON_abs",
+        "logret_HORIZON_lz_abs",
+        "logret_resid_eqmkt_HORIZON_trmean",
+        "logret_resid_eqmkt_HORIZON_trstd",
+        "logret_resid_eqmkt_HORIZON_lz",
+        "logret_resid_wgtmkt_HORIZON_trmean",
+        "logret_resid_wgtmkt_HORIZON_trstd",
+        "logret_resid_wgtmkt_HORIZON_lz",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "dvolume_HORIZON_trmean_cz",
+        "relative_spread_HORIZON",
+        "ba_imbal_HORIZON",
+        "news_event",
+        "news_event_decayed_HORIZON",
+        "open_interest_HORIZON_d",
+        "open_interest_HORIZON_dp",
+        "rsi_HORIZON"
+      ]
+    },
+    "1440": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "logret_HORIZON_lz_cz",
+        "logret_HORIZON_cz",
+        "logret_HORIZON_abs",
+        "logret_HORIZON_lz_abs",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "dvolume_HORIZON_trmean_cz",
+        "relative_spread_HORIZON",
+        "trade_sz_HORIZON",
+        "hour_of_day",
+        "day_of_week",
+        "ba_imbal_HORIZON",
+        "open_interest_HORIZON_d",
+        "open_interest_HORIZON_dp",
+        "rsi_HORIZON"
+      ],
+      "non_prod": [
+        "logret_HORIZON_min",
+        "logret_HORIZON_max",
+        "logret_HORIZON_trstd_u",
+        "logret_HORIZON_trstd_d",
+        "logret_HORIZON_trstd_udratio",
+        "logret_resid_eqmkt_HORIZON_trmean",
+        "logret_resid_eqmkt_HORIZON_trstd",
+        "logret_resid_eqmkt_HORIZON_lz",
+        "logret_resid_wgtmkt_HORIZON_trmean",
+        "logret_resid_wgtmkt_HORIZON_trstd",
+        "logret_resid_wgtmkt_HORIZON_lz",
+        "tradeable",
+        "expandable",
+        "dvolume_HORIZON_d",
+        "dvolume_HORIZON_dp",
+        "relative_updates_HORIZON",
+        "beta_HORIZON",
+        "beta_t_HORIZON"
+      ]
+    },
+    "720": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "logret_HORIZON_lz_cz",
+        "logret_HORIZON_abs",
+        "logret_HORIZON_lz_abs",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "dvolume_HORIZON_trmean_cz",
+        "relative_spread_HORIZON",
+        "ba_imbal_HORIZON",
+        "news_event",
+        "news_event_decayed_HORIZON",
+        "open_interest_HORIZON_d",
+        "open_interest_HORIZON_dp"
+      ],
+      "non_prod": [
+        "logret_HORIZON_trstd_u",
+        "logret_HORIZON_trstd_d",
+        "logret_HORIZON_trstd_udratio"
+      ]
+    },
+    "360": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "logret_HORIZON_lz_cz",
+        "logret_HORIZON_abs",
+        "logret_HORIZON_lz_abs",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "dvolume_HORIZON_trmean_cz",
+        "relative_spread_HORIZON",
+        "ba_imbal_HORIZON",
+        "news_event",
+        "news_event_decayed_HORIZON",
+        "open_interest_HORIZON_d",
+        "open_interest_HORIZON_dp"
+      ],
+      "non_prod": [
+        "logret_HORIZON_trstd_u",
+        "logret_HORIZON_trstd_d",
+        "logret_HORIZON_trstd_udratio"
+      ]
+    },
+    "120": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "logret_HORIZON_lz_cz",
+        "logret_HORIZON_abs",
+        "logret_HORIZON_lz_abs",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "dvolume_HORIZON_trmean_cz",
+        "relative_spread_HORIZON",
+        "ba_imbal_HORIZON",
+        "news_event",
+        "news_event_decayed_HORIZON",
+        "open_interest_HORIZON_d",
+        "open_interest_HORIZON_dp"
+      ],
+      "non_prod": [
+        "logret_HORIZON_trstd_u",
+        "logret_HORIZON_trstd_d",
+        "logret_HORIZON_trstd_udratio"
+      ]
+    },
+    "60": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "logret_HORIZON_lz_cz",
+        "logret_HORIZON_abs",
+        "logret_HORIZON_lz_abs",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "dvolume_HORIZON_trmean_cz",
+        "trade_sz_HORIZON",
+        "relative_spread_HORIZON",
+        "ba_imbal_HORIZON",
+        "news_event",
+        "news_event_decayed_HORIZON"
+      ],
+      "non_prod": [
+        "logret_HORIZON_trstd_u",
+        "logret_HORIZON_trstd_d",
+        "logret_HORIZON_trstd_udratio",
+        "median_time_bucket_dvolume_HORIZON",
+        "dvolume_HORIZON_d",
+        "dvolume_HORIZON_dp"
+      ]
+    },
+    "15": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "logret_HORIZON_lz_cz",
+        "logret_HORIZON_abs",
+        "logret_HORIZON_lz_abs",
+        "logret_resid_eqmkt_HORIZON_trmean",
+        "logret_resid_eqmkt_HORIZON_trstd",
+        "logret_resid_eqmkt_HORIZON_lz",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "dvolume_HORIZON_trmean_cz",
+        "dvolume_HORIZON_lz_cz",
+        "trade_sz_HORIZON",
+        "relative_spread_HORIZON",
+        "ba_imbal_HORIZON",
+        "news_event",
+        "news_event_decayed_HORIZON"
+      ],
+      "non_prod": [
+        "logret_HORIZON_trstd_u",
+        "logret_HORIZON_trstd_d",
+        "logret_HORIZON_trstd_udratio",
+        "dvolume_HORIZON_d",
+        "dvolume_HORIZON_dp"
+      ]
+    }
+  },
+  "EXPOSURE_LIMITS": {
+    "dollar_exposure": 0.05
+  },
+  "FACTOR_SIGMAS": {
+    "dollar_exposure": 0.1,
+    "dvolume_1440_trmean_cz": 0.001,
+    "logret_1440_lz_cz": 0.0001
+  },
+  "ST_KAPPA": 100.0,
+  "ST_FACTOR_SIGMAS": {
+    "dollar_exposure": 0.003,
+    "expanding": 0.01
+  },
+  "FCASTS": {
+    "15": {
+      "return_type": "funding_adj_resid_wgt",
+      "refitting_days": 1,
+      "fitting_lookback_days": 1,
+      "features": [
+        "logret_15_trstd",
+        "dvolume_15_trmean",
+        "ba_imbal_15",
+        "trade_sz_15"
+      ],
+      "models": [
+        {
+          "name": "hl",
+          "lags": 1,
+          "weight": 1.0,
+          "fit_type": "vanilla"
+        }
+      ]
+    }
+  },
+  "MIN_ADVP_PRICEABLE": 25000000.0,
+  "FEATUREABLE_HIST_PERIODS": 30
+}

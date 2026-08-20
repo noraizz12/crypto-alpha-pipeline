@@ -1,0 +1,187 @@
+{
+  "_comment": "Example configuration for demo/development. Copy to config.json and adjust values.",
+
+  "DYNAMIC_UNIVERSE": true,
+  "SYMBOL_UNIVERSE": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT"],
+
+  "DEFAULT_FEATURE_LOOKBACK_PERIODS": 30,
+  "ADV_LOOKBACK_DAYS": 30,
+  "MA_LOOKBACK_DAYS": 30,
+  "CLASSIFICATION_HISTORY_DAYS": 180,
+
+  "NEWS_SIMILARITY_THRESHOLD": 0.9,
+
+  "SIGMA_BOUND_DEP": 5,
+  "SIGMA_BOUND_INDEP": 5,
+
+  "MAX_PORTFOLIO_NOTIONAL": 100000,
+  "MAX_PORTFOLIO_NOTIONAL_SLACK": 0.035,
+  "MAX_TRADING_BIAS": 0.10,
+  "MAX_POSITION_PCT": 0.10,
+  "MAX_POSITION_VOLUME_FRACTION": 0.02,
+  "MAX_POSITION_BOUNDS": [
+    [0.1, 0.010],
+    [0.2, 0.020],
+    [0.3, 0.030],
+    [0.4, 0.040],
+    [0.5, 0.050],
+    [0.6, 0.060],
+    [0.7, 0.070],
+    [0.8, 0.080],
+    [0.9, 0.090],
+    [1.0, 0.100]
+  ],
+  "MAX_TRADE_DOLLARS": 10000,
+  "MIN_TRADE_DOLLARS": 100,
+
+  "MAX_ORDER_DOLLARS": 5000,
+  "MAX_DOLLARS_PER_OPT_TO_TRADE_MULT": 1.3,
+  "MAX_TOTAL_ORDER_DOLLARS": 20000,
+  "VOLUME_BUCKET_MINS": 60,
+  "ORDER_ACCELERATION": 1.2,
+  "MAX_VOLUME_FRACTION_PARTICIPATION": 0.02,
+  "MIN_POSITION": 100,
+
+  "MIN_ADVP_BARS": 1e6,
+  "MIN_ADVP_PRICEABLE": 2e6,
+  "MIN_ADVP_FITTABLE": 1e6,
+  "MIN_ADVP_TRADEABLE": 1e6,
+  "MIN_ADVP_EXPANDABLE": 1e6,
+  "MAX_MARKET_CAP_EXPANDABLE_FRAC": 1.0,
+
+  "FILTER_DELISTING": true,
+  "DELISTING_BUFFER_DAYS": 6,
+  "MAX_MOVE_FILTER": 5.0,
+  "MAX_DVOL_SIGMA": 3.0,
+  "MIN_FUNDING_RATE": -0.005,
+  "VOL_BOUND_COEFF": 0.3,
+  "VOL_BOUND_FLOOR": 0.4,
+  "OLD_POSITION_DAYS": 30,
+  "OLD_POSITION_RISK_MULT": 3.5,
+  "SKYROCKETING_SIGMA_LEVEL": null,
+  "SKYROCKETING_SLIPPAGE": 0.001,
+
+  "HORIZON_MODEL_FACTOR": 0.001,
+  "MAX_ALPHA": 0.5,
+  "ALPHA_MULT": 1.0,
+  "ALPHA_TILT": 0.0,
+  "CENTER_ALPHA_OPT": true,
+  "SCALE_ALPHA_OPT": false,
+  "NEW_SCALE_ALPHA": true,
+  "EXCLUDE_NON_ALPHA_TRADES": false,
+  "ENFORCE_REV_MOM": true,
+
+  "CONST_NOTIONAL": false,
+  "CORRECT_TARGET_IMBALANCE": true,
+
+  "RISK_FLD": "logret_HORIZON_trstd",
+  "RISK_HORIZON": 1440,
+  "ST_RISK_HORIZON": 15,
+  "SHORT_TERM_MODEL_HORIZONS": [60, 15],
+
+  "OPT_HORIZON": 1440,
+  "MAX_TURNOVER": 1.0,
+
+  "KAPPA": 1e-7,
+  "GAMMA": 5e-3,
+
+  "OPT_RHO": 0.3,
+  "OPT_RHO_INTERVAL": 10,
+  "OPT_ALPHA": 1.6,
+
+  "MIN_TSTAT": 1.0,
+  "FEATURE_SIGMA_BOUND": 5,
+
+  "SVM_REGULARIZATION": 0.0005,
+  "MIN_CLASSIFICATION_QUANTILE": 0.10,
+  "USE_CLUSTER_REGRESSION": false,
+  "WEIGHTED_REGRESSION": true,
+  "RF_N_ESTIMATORS": 100,
+  "RF_MAX_DEPTH": 8,
+  "RF_MIN_SAMPLES_SPLIT": 500,
+  "RF_MIN_SAMPLES_LEAF": 500,
+  "RF_RANDOM_STATE": 42,
+  "RF_N_JOBS": 4,
+  "RF_CLASS_WEIGHT": "balanced",
+  "RF_VERBOSE": 0,
+  "RF_MAX_SAMPLES": 0.35,
+  "RF_MAX_FEATURES": "sqrt",
+  "RF_BOOTSTRAP": true,
+  "RF_OOB_SCORE": true,
+  "RF_CCP_ALPHA": 0.0,
+
+  "FITTING_RESAMPLE_HORIZON_THRESHOLD": 4320,
+  "FITTING_RESAMPLE_FREQUENCY": "60min",
+
+  "OPT_OFFSET_MINS": 3,
+  "REOPTIMIZE_INTERVAL_MINS": 120,
+
+  "REOPT_TIMES": [
+    "00:00", "04:00", "08:00", "12:00", "16:00", "20:00"
+  ],
+
+  "EXCHANGE_FEES": 0.0001,
+  "DEFAULT_SLIPPAGE": 0.0002,
+
+  "WAVE_INTERVAL_MINS": 1,
+
+  "SIM_EXECUTION_PRICE": "vwap",
+  "VWAP_HORIZON": 120,
+  "BASE_AGGRESSION": 0.001,
+
+  "ST_FACTOR_SIGMAS": 2.0,
+  "ST_KAPPA": 1e-6,
+
+  "EXOG_TICKERS": ["SPY", "GLD", "IYW"],
+
+  "FEATURES": {
+    "1440": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "dvolume_HORIZON_trmean",
+        "dvolume_HORIZON_trstd",
+        "dvolume_HORIZON_lz",
+        "relative_spread_HORIZON",
+        "relative_spread_HORIZON_lz",
+        "trade_sz_HORIZON",
+        "trade_sz_HORIZON_lz",
+        "hour_of_day",
+        "day_of_week"
+      ],
+      "non_prod": []
+    },
+    "60": {
+      "prod": [
+        "logret_HORIZON_trmean",
+        "logret_HORIZON_trstd",
+        "logret_HORIZON_lz",
+        "dvolume_HORIZON_lz",
+        "relative_spread_HORIZON_lz"
+      ],
+      "non_prod": []
+    },
+    "15": {
+      "prod": [
+        "logret_HORIZON_lz",
+        "dvolume_HORIZON_lz",
+        "relative_spread_HORIZON_lz"
+      ],
+      "non_prod": []
+    }
+  },
+
+  "MODELS": {
+    "1440": {
+      "hl": {"weight": 1.0},
+      "c2vwap": {"weight": 1.0}
+    },
+    "60": {
+      "hl": {"weight": 0.5}
+    },
+    "15": {
+      "hl": {"weight": 0.25}
+    }
+  }
+}

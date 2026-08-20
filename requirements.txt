@@ -1,0 +1,59 @@
+# Crypto Market Data Engineering System - Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+pyarrow>=12.0.0
+scipy>=1.10.0
+
+# Machine Learning
+scikit-learn>=1.3.0
+cvxpy>=1.4.0
+scs>=3.2.0
+statsmodels>=0.14.0
+
+# Async and Networking
+aiohttp>=3.8.0
+websockets>=12.0
+
+# AWS Integration (optional - for cloud deployment)
+boto3>=1.28.0
+botocore>=1.31.0
+
+# Database
+clickhouse-connect>=0.6.0
+
+# Messaging
+pyzmq>=25.0.0
+
+# External Data Sources
+tardis-dev>=2.1.0
+pycoingecko>=3.0.0
+
+# Visualization
+plotly>=5.15.0
+dash>=2.11.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Alerting and Notifications
+slack-sdk>=3.21.0
+opsgenie-sdk>=2.1.0
+
+# Development and Testing
+pytest>=7.4.0
+pylint>=3.0.0
+ipython>=8.14.0
+ipykernel>=6.25.0
+
+# Utilities
+beautifulsoup4>=4.12.0
+colorama>=0.4.6
+deepdiff>=6.3.0
+lz4>=4.3.0
+pillow>=10.0.0
+psutil>=5.9.0
+tabulate>=0.9.0
+patsy>=0.5.0
+vaderSentiment>=3.3.0

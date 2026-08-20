@@ -1,0 +1,229 @@
+#!/bin/bash
+# Git pre-push hook for running unit tests and integration tests
+# Also prevents accidental pushes to master branch
+#
+# To skip tests temporarily, use: git push --no-verify
+# Or set environment variable: SKIP_TESTS=1 git push
+
+
+# Check which branch is being pushed
+protected_branch='master'
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+
+# Check if pushing to master
+if [ "$current_branch" = "$protected_branch" ]; then
+    echo -e "${YELLOW}⚠️  WARNING: You are pushing directly to the master branch!${NC}"
+    echo -e "${YELLOW}This should only be done for hotfixes.${NC}"
+    echo ""
+    echo -e "Are you sure you want to push to master? [y/N] "
+    read -n 1 -r < /dev/tty
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo -e "${RED}Push to master cancelled.${NC}"
+        echo -e "${GREEN}Consider creating a feature branch and PR instead.${NC}"
+        exit 1
+    fi
+    echo -e "${YELLOW}Proceeding with push to master...${NC}"
+fi
+
+# Check if tests should be skipped
+if [ "$SKIP_TESTS" = "1" ]; then
+    echo "Skipping tests (SKIP_TESTS=1)"
+    exit 0
+fi
+
+# These values will be replaced by install_git_hooks.sh
+ROOT_DIR="/path/to/root"
+SRC_DIR="/path/to/src"
+
+# Validate directories exist
+if [ ! -d "$ROOT_DIR" ] || [ ! -d "$SRC_DIR" ]; then
+    echo "Error: ROOT_DIR or SRC_DIR not properly set by install_git_hooks.sh"
+    echo "ROOT_DIR=$ROOT_DIR"
+    echo "SRC_DIR=$SRC_DIR"
+    exit 1
+fi
+
+TEST_DIR=$SRC_DIR/test
+
+
+# Function to run unit tests
+run_unit_tests() {
+    echo -e "${BLUE}================== Running Unit Tests ==================${NC}"
+    
+    # Activate virtual environment
+    source "$SRC_DIR/venv/bin/activate"
+    
+    # Add the src directory to PYTHONPATH
+    export PYTHONPATH="$SRC_DIR:$PYTHONPATH"
+    
+    # Change to source directory
+    cd $SRC_DIR
+    
+    # Find all unit test files (excluding integration tests)
+    UNIT_TEST_FILES=$(find test/ -name "test_*.py" -type f | grep -v "integration_test" | sort)
+    
+    if [ -z "$UNIT_TEST_FILES" ]; then
+        echo -e "${YELLOW}No unit test files found.${NC}"
+        return 0
+    fi
+    
+    # Run each unit test file
+    failed=0
+    for test_file in $UNIT_TEST_FILES; do
+        test_name=$(basename "$test_file" .py)
+        echo -e "${YELLOW}Running unit tests for ${test_name}...${NC}"
+        
+        if python -m pytest "$test_file" -v --tb=short; then
+            echo -e "${GREEN}✓ ${test_name} passed.${NC}\n"
+        else
+            echo -e "${RED}✗ ${test_name} failed.${NC}\n"
+            failed=1
+        fi
+    done
+    
+    if [ $failed -eq 0 ]; then
+        echo -e "${GREEN}✓ Unit tests passed successfully.${NC}\n"
+        return 0
+    else
+        echo -e "${RED}✗ Unit tests failed. Push aborted.${NC}"
+        echo -e "${RED}Please fix the unit tests before pushing.${NC}"
+        echo -e "\n${YELLOW}Tip: To skip tests temporarily, use: git push --no-verify${NC}"
+        return 1
+    fi
+}
+
+# Function to check CSV differences
+check_csvdiff() {
+    local temp_dir="fixtures/temp_generated"
+    local test_name="$1" 
+    local master_file="$temp_dir/master.csv"
+    local temp_file="$temp_dir/temp.csv"
+    
+    if [[ -f "$master_file" && -f "$temp_file" ]]; then
+        daff --output "$temp_dir/temp.html" "$master_file" "$temp_file"
+        
+        (
+        echo '<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+            body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; padding: 20px; line-height: 1.5; }
+            .diff { background: #f8f9fa; border-radius: 6px; overflow-x: auto; }
+            table { border-collapse: collapse; width: 100%; margin: 0; }
+            th { background: #f6f8fa; border: 1px solid #d0d7de; padding: 8px 16px; text-align: left; position: sticky; top: 0; }
+            td { border: 1px solid #d0d7de; padding: 8px 16px; }
+            td.add { background-color: #e6ffec; }
+            td.remove { background-color: #ffebe9; }
+            td.modify { background-color: #fafbfc; }
+            .header { padding: 16px; border-bottom: 1px solid #d0d7de; }
+            .file-header { color: #24292f; font-weight: 600; }
+        </style></head><body>
+        <div class="header">
+            <span class="file-header">Showing changes between files - Test: '"$test_name"'</span>
+        </div>
+        <div class="diff">'
+        cat $temp_dir/temp.html
+        echo '</div></body></html>'
+        ) > "fixtures/${test_name}_diff.html"
+
+        # Clean up the temporary file
+        rm "$temp_dir/temp.html"
+        
+        echo "CSV diff created for test: $test_name"
+    fi
+}
+
+# Function to run integration tests
+run_integration_tests() {
+    echo -e "${BLUE}================ Running Integration Tests =================${NC}"
+
+    # Activate virtual environment if not already activated
+    source "$SRC_DIR/venv/bin/activate"
+
+    # Add the src directory to PYTHONPATH
+    export PYTHONPATH="$SRC_DIR:$PYTHONPATH"
+
+    # Change to the directory containing test files
+    cd $TEST_DIR
+
+    # Kill the existing http server for diff html
+    if lsof -ti:8060; then
+        lsof -ti:8060 | xargs kill -9
+    else
+        echo "No process found on port 8060"
+    fi
+    rm -f ./fixtures/*_diff.html
+
+    tests=(
+        "integration_test_generate_bars.py::test_bar_generation"
+        "integration_test_pnl_calculator.py::test_pnl_calculator_run"
+        "integration_test_generate_features.py::test_feature_run"
+        "integration_test_generate_forwards.py::test_forwards_run"
+        "integration_test_generate_models.py::test_model_run"
+        # TODO: Enable fits test after creating proper forward returns fixtures
+        # "integration_test_generate_fits.py::test_fits_run"
+        "integration_test_generate_alphas.py::test_alphas_run"
+        "integration_test_sim.py::test_simulate_calculation"
+        "integration_test_server.py::test_server_run"
+    )
+
+    declare -A results
+
+    failed=0
+    for test in "${tests[@]}"; do
+        test_name=$(echo $test | cut -d'.' -f1)
+        echo -n "$test_name: "
+        if output=$(python -m pytest -rA -vv $test 2>&1); then
+            echo -e "${GREEN}pass${NC}"
+            results[$test_name]="pass"
+        else
+            echo -e "${RED}fail${NC}"
+            echo "$output" | sed -n '/=* short test summary info =*/,/=.*=/{/=.*=/!p}'  # Show the error output
+            check_csvdiff "$test_name"
+            results[$test_name]="fail"
+            failed=1
+        fi
+    done
+
+    # Final summary
+    echo -e "\nTest Results Summary:"
+    echo -e "-------------------"
+    for test_name in "${!results[@]}"; do
+        if [ "${results[$test_name]}" == "pass" ]; then
+            echo -e "$test_name: ${GREEN}pass${NC}"
+        else
+            echo -e "$test_name: ${RED}fail${NC}"
+        fi
+    done
+
+    if [ $failed -eq 0 ]; then
+        echo -e "\n${GREEN}All integration tests passed successfully.${NC}"
+        return 0
+    else
+        nohup python -m http.server 8060 &
+        echo -e "\n${RED}Some integration tests failed. Push aborted.${NC}"
+        echo -e "\n${YELLOW}Tip: To skip tests temporarily, use: git push --no-verify${NC}"
+        return 1
+    fi
+}
+
+# Main execution
+echo -e "${BLUE}========== Pre-Push Hook: Running Test Suite ==========${NC}\n"
+
+# Clean up error parquet files before running tests
+echo -e "${BLUE}Cleaning up error parquet files...${NC}"
+cd $SRC_DIR
+rm -f error_df_*.parquet
+echo -e "${GREEN}✓ Cleaned up error parquet files.${NC}\n"
+
+# Run unit tests first
+if ! run_unit_tests; then
+    exit 1
+fi
+
+# If unit tests pass, run integration tests
+if ! run_integration_tests; then
+    exit 1
+fi
+
+# If we've made it this far, all tests have passed
+echo -e "\n${GREEN}✓ All tests passed successfully. Proceeding with push...${NC}"
+exit 0

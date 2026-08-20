@@ -1,0 +1,14 @@
+pnl:annualized_sharpe:-4.8
+pnl:annualized_ret_perc:-177.17%
+pnl:annualized_risk_perc:37.24%
+pnl:lifetime_pnl:$-622.0
+pnl:lifetime_ret_perc:-0.85%
+pnl:win_ratio:54.55%
+pnl:profit_trades:6 / 11
+pnl:gain_per_fill:$47.3
+pnl:loss_per_fill:$-49.9
+pnl:max_drawdown:$-1030.4
+pnl:max_drawdown_perc:-2.72%
+pnl:daily_traded_dollars:$53145.6
+pnl:daily_fees:$2.7
+pnl:daily_fees_bps:0.5
