@@ -9,6 +9,7 @@ The data is used for:
 
 The module respects CoinGecko's rate limits with built-in delays between requests.
 """
+import os
 import time
 import logging
 from datetime import datetime as dt, timezone
@@ -25,7 +26,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-API_KEY = "CG-kZc5n9vdxQDKSFQ5EXf41iCn"
+# Get your API key at https://www.coingecko.com/en/api
+API_KEY = os.environ.get("COINGECKO_API_KEY", "")
 
 # Number of top categories to fetch for categorization
 TOP_N_CATEGORIES = 30
